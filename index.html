@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="neon">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Smart Calculator</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+  <div class="top-bar">
+    <div class="mode-toggle">
+      <input type="checkbox" id="toggleMode" onchange="toggleTheme()" />
+      <label for="toggleMode" class="switch"></label>
+    </div>
+    <select id="languageSelect" onchange="changeLanguage()">
+      <option value="en">English</option>
+      <option value="hi">हिन्दी</option>
+      <option value="mr">मराठी</option>
+    </select>
+    <select id="themeSelector">
+      <option value="neon">Neon</option>
+      <option value="matrix">Matrix</option>
+      <option value="light">Light</option>
+      <option value="dark">Dark</option>
+      <option value="galaxy">Galaxy</option>
+      <option value="auto">Auto</option>
+    </select>
+  </div>
+
+  <div class="container">
+    <h1 class="header" id="headerText">Smart Calculator</h1>
+
+    <!-- Mode Tabs -->
+    <div class="mode-tabs">
+      <button class="tab-button" data-mode="basic" onclick="switchMode('basic')">🧮 Basic</button>
+      <button class="tab-button" data-mode="scientific" onclick="switchMode('scientific')">🧪 Scientific</button>
+      <button class="tab-button" data-mode="programmer" onclick="switchMode('programmer')">🧠 Programmer</button>
+      <button class="tab-button" data-mode="health" onclick="switchMode('health')">🩺 Health</button>
+      <button class="tab-button" data-mode="currency" onclick="switchMode('currency')">💰 Currency</button>
+    </div>
+
+    <div class="calculator">
+      <div class="display" id="display">0</div>
+
+      <!-- Basic Mode Buttons -->
+      <div class="buttons basic-mode mode-panel">
+        <button class="func" onclick="clearDisplay()">C</button>
+        <button class="func" onclick="deleteLast()">DEL</button>
+        <button class="func" onclick="appendOperator('%')">%</button>
+        <button class="operator" onclick="appendOperator('/')">÷</button>
+
+        <button onclick="appendNumber('7')">7</button>
+        <button onclick="appendNumber('8')">8</button>
+        <button onclick="appendNumber('9')">9</button>
+        <button class="operator" onclick="appendOperator('*')">×</button>
+
+        <button onclick="appendNumber('4')">4</button>
+        <button onclick="appendNumber('5')">5</button>
+        <button onclick="appendNumber('6')">6</button>
+        <button class="operator" onclick="appendOperator('-')">−</button>
+
+        <button onclick="appendNumber('1')">1</button>
+        <button onclick="appendNumber('2')">2</button>
+        <button onclick="appendNumber('3')">3</button>
+        <button class="operator" onclick="appendOperator('+')">+</button>
+
+        <button class="zero" onclick="appendNumber('0')">0</button>
+        <button onclick="appendNumber('.')">.</button>
+        <button class="equal" onclick="calculateResult()">=</button>
+      </div>
+
+      <!-- Scientific Mode Buttons -->
+      <div class="buttons scientific-mode mode-panel" style="display:none">
+        <button onclick="appendScientific('Math.sin(')">sin</button>
+        <button onclick="appendScientific('Math.cos(')">cos</button>
+        <button onclick="appendScientific('Math.tan(')">tan</button>
+        <button onclick="appendScientific('Math.log(')">log</button>
+        <button onclick="appendScientific('Math.sqrt(')">√</button>
+        <button onclick="appendScientific('Math.pow(')">^</button>
+        <button onclick="closeParenthesis()">)</button>
+        <button onclick="appendScientific('(')">(</button>
+        <button onclick="calculateFactorial()">x!</button>
+        <button onclick="memoryAdd()">M+</button>
+        <button onclick="memorySubtract()">M-</button>
+        <button onclick="memoryRecall()">MR</button>
+        <button onclick="memoryClear()">MC</button>
+      </div>
+
+      <!-- Programmer Mode -->
+      <div class="programmer-mode mode-panel" style="display:none">
+        <input type="number" id="progInput" placeholder="Enter Decimal Number">
+        <button onclick="convertToBinary()">To Binary</button>
+        <button onclick="convertToHex()">To Hex</button>
+        <div id="progResult"></div>
+      </div>
+
+      <!-- Health Mode (BMI & Age) -->
+      <div class="health-mode mode-panel" style="display:none">
+        <h3>BMI Calculator</h3>
+        <input type="number" id="weight" placeholder="Weight (kg)">
+        <input type="number" id="height" placeholder="Height (cm)">
+        <button onclick="calculateBMI()">Calculate BMI</button>
+        <div id="bmiResult"></div>
+
+        <h3>Age Calculator</h3>
+        <input type="date" id="birthDate">
+        <button onclick="calculateAge()">Calculate Age</button>
+        <div id="ageResult"></div>
+      </div>
+
+      <!-- Currency Converter -->
+      <div class="currency-mode mode-panel" style="display:none">
+        <input type="number" id="currencyAmount" placeholder="Amount">
+        <select id="fromCurrency">
+          <option value="INR">INR</option>
+          <option value="USD">USD</option>
+          <option value="EUR">EUR</option>
+        </select>
+        <select id="toCurrency">
+          <option value="USD">USD</option>
+          <option value="INR">INR</option>
+          <option value="EUR">EUR</option>
+        </select>
+        <button onclick="convertCurrency()">Convert</button>
+        <div id="currencyResult"></div>
+      </div>
+    </div>
+
+    <div class="ai-box">
+      <input type="text" id="aiInput" placeholder="Ask AI or explain..." />
+      <button onclick="askAI()">Ask</button>
+      <div id="aiOutput"></div>
+    </div>
+
+    <div class="history-box">
+      <h3 id="historyLabel">Calculation History</h3>
+      <ul id="historyList"></ul>
+      <button class="refresh-btn" onclick="clearHistory()">🧹 Refresh History</button>
+    </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  <script src="script.js"></script>
+  <script>
+    function switchMode(mode) {
+      document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+      document.querySelector(`.tab-button[data-mode="${mode}"]`).classList.add('active');
+      document.querySelectorAll('.mode-panel').forEach(panel => panel.style.display = 'none');
+      document.querySelector(`.${mode}-mode`).style.display = 'grid';
+      localStorage.setItem('selectedMode', mode);
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      const savedMode = localStorage.getItem('selectedMode') || 'basic';
+      switchMode(savedMode);
+    });
+  </script>
+</body>
+</html>
